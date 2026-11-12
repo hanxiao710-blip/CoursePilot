@@ -10,7 +10,7 @@ Built with **React** and **Vite**.
 | Branch | Purpose |
 |---|---|
 | `main` | Agreed, shared version of the complete website. Only merge here when the team agrees. |
-| `dashboard` | Your current work: dashboard page, layout, design, and background customization. |
+| `dashboard` |Development of dashboard page, layout, design, and background customization. |
 | `learning-assistant` | Development of the AI learning assistant feature. |
 | `planner` | Development of the assignment planner feature. |
 | `vocabulary` | Development of the vocabulary builder feature. |
