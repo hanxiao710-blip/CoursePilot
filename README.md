@@ -119,8 +119,12 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open **http://localhost:5173** in your browser.  
-You will be redirected to `/login` automatically if you are not signed in.
+For local development, run `npm run dev`, then open the local URL shown in your terminal (usually http://localhost:5173).
+
+To use the deployed website, visit:
+https://course-pilot-lovat.vercel.app
+
+If you are not signed in, you will be redirected to the login page.
 
 ---
 
