@@ -1,10 +1,44 @@
+/* ── Page wrapper (supports background image) ── */
 .page {
+  min-height: calc(100vh - 64px); /* subtract header height */
+  position: relative;
   animation: fadeIn 0.25s ease;
+  background-size: cover;
+  background-position: center;
+  background-attachment: local;
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Semi-transparent overlay so text stays legible over images */
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(245, 247, 251, 0.82);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Content sits above the overlay */
+.pageContent {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Hero row (title + bg controls) ── */
+.heroRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.heroRow > div:first-child {
+  flex: 1 1 auto;
 }
 
 .pageTitle {
@@ -16,8 +50,64 @@
 
 .pageSubtitle {
   color: #4a5568;
-  margin: 0 0 1.75rem;
+  margin: 0;
   font-size: 1rem;
+}
+
+/* ── Background image controls ── */
+.bgControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.fileInputHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+.bgBtn {
+  display: inline-block;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: #2d3748;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.bgBtn:hover {
+  background: #fff;
+  border-color: #a0aec0;
+}
+.bgBtnDisabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.bgBtnRemove {
+  color: #c53030;
+  border-color: #feb2b2;
+}
+.bgBtnRemove:hover {
+  background: #fff5f5;
+  border-color: #fc8181;
+}
+
+.bgError {
+  color: #c53030;
+  font-size: 0.8rem;
+  width: 100%;
 }
 
 /* ── Card grid ── */
@@ -38,7 +128,7 @@
 
 /* ── Card ── */
 .card {
-  background: #fff;
+  background: rgba(255,255,255,0.95);
   border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 1.25rem 1.5rem 1.5rem;
@@ -51,20 +141,6 @@
   font-weight: 600;
   color: #1a56db;
   margin: 0 0 1rem;
-}
-
-.demoTag {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: #ebf4ff;
-  color: #1a56db;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 0.15rem 0.5rem;
-  border-radius: 99px;
-  text-transform: uppercase;
 }
 
 /* ── Deadline list ── */
@@ -84,6 +160,31 @@
   gap: 0.4rem;
 }
 
+/* Complete button */
+.completeBtn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e0;
+  background: transparent;
+  color: #718096;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  padding: 0;
+  line-height: 1;
+}
+.completeBtn:hover {
+  border-color: #48bb78;
+  background: #f0fff4;
+  color: #276749;
+}
+
 .course {
   background: #dbe4ff;
   color: #1a3a8f;
@@ -91,6 +192,7 @@
   font-weight: 700;
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .task {
@@ -99,10 +201,27 @@
   font-size: 0.95rem;
 }
 
-.due {
-  color: #e53e3e;
-  font-size: 0.8rem;
+/* Deadline urgency badges */
+.dueBadge {
+  font-size: 0.78rem;
   font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  background: #edf2f7;
+  color: #4a5568;
+}
+.dueBadge.overdue {
+  background: #fff5f5;
+  color: #c53030;
+}
+.dueBadge.today {
+  background: #fefcbf;
+  color: #744210;
+}
+.dueBadge.soon {
+  background: #feebc8;
+  color: #7b341e;
 }
 
 /* ── Study suggestion ── */
@@ -113,27 +232,33 @@
   padding: 0.9rem 1rem;
 }
 
-.suggestionTitle {
-  font-weight: 600;
-  color: #1a202c;
-  margin: 0 0 0.4rem;
-}
-
 .suggestionDetail {
   color: #4a5568;
-  margin: 0;
+  margin: 0 0 0.5rem;
   font-size: 0.93rem;
   line-height: 1.55;
 }
 
+.suggestionMeta {
+  color: #a0aec0;
+  font-size: 0.78rem;
+  margin: 0;
+}
+
 /* ── Vocabulary list ── */
+.vocabCount {
+  color: #718096;
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+}
+
 .vocabList {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
 .vocabItem {
@@ -147,7 +272,32 @@
   display: block;
   font-weight: 700;
   color: #1a56db;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.2rem;
+}
+
+.vocabStatus {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  margin-bottom: 0.35rem;
+  background: #e2e8f0;
+  color: #4a5568;
+}
+.vocabStatus[data-status="new"] {
+  background: #ebf8ff;
+  color: #2b6cb0;
+}
+.vocabStatus[data-status="learning"] {
+  background: #fefcbf;
+  color: #744210;
+}
+.vocabStatus[data-status="mastered"] {
+  background: #f0fff4;
+  color: #276749;
 }
 
 .vocabDef {
@@ -155,4 +305,39 @@
   color: #4a5568;
   font-size: 0.88rem;
   line-height: 1.45;
+}
+
+/* ── State messages ── */
+.loading {
+  color: #718096;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.empty {
+  color: #718096;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.loadError {
+  color: #c53030;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 480px) {
+  .heroRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bgControls {
+    width: 100%;
+  }
+  .pageTitle {
+    font-size: 1.4rem;
+  }
 }
