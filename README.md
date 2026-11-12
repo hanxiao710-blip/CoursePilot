@@ -62,47 +62,41 @@ CoursePilot/
 
 ---
 
-## One-time Supabase setup (do this once, shared by the whole team)
+## Local setup for team members
 
-### 1. Create a Supabase project
+CoursePilot already uses a shared Supabase project. You do not need to create a new project, rerun the initial database migration, recreate storage buckets, or change authentication settings.
 
-1. Go to [supabase.com](https://supabase.com) → **New project**.
-2. Choose a name (e.g. `CoursePilot`), a strong database password, and your nearest region.
-3. Wait for provisioning (~1 minute).
+### 1. Create your local configuration file
 
-### 2. Run the database migration
+Create a file named `.env.local` inside `website_structure/` and paste:
 
-1. In the Supabase dashboard go to **SQL Editor**.
-2. Open `supabase/migrations/001_initial_schema.sql` from this repo.
-3. Paste the entire file and click **Run**.  
-   This creates the `profiles`, `assignments`, `vocabulary`, and `study_suggestions` tables with Row Level Security enabled.
+```env
+VITE_SUPABASE_URL=https://kwzhkwzrwahiejjlkycn.supabase.co
+VITE_SUPABASE_ANON_KEY=sb_publishable_WgNJEF9Q5EU4lPv9TXgZtA_-eKXWfd7
+```
 
-### 3. Create the storage bucket
+This is the frontend publishable key. Keep `.env.local` excluded from Git. Never add a `service_role` key or other private credentials to frontend code.
 
-1. Go to **Storage** → **New bucket**.
-2. Name it exactly **`avatars`**, keep **Public** set to **off**, click **Create bucket**.
-3. Go to **Storage → Policies** and add three policies for the `avatars` bucket:
+### 2. Install dependencies and start the app
 
-| Policy name | Operation | `using` / `with check` expression |
-|---|---|---|
-| Users upload own files | INSERT | `(storage.foldername(name))[1] = auth.uid()::text` |
-| Users view own files | SELECT | `(storage.foldername(name))[1] = auth.uid()::text` |
-| Users delete own files | DELETE | `(storage.foldername(name))[1] = auth.uid()::text` |
+From the repository root, run:
 
-### 4. Configure Auth redirect URLs
+```bash
+cd website_structure
+npm install
+npm run dev
+```
 
-1. Go to **Authentication → URL Configuration**.
-2. Set **Site URL** to `http://localhost:5173` (update to your production URL when you deploy).
-3. Add these **Redirect URLs**:
-   - `http://localhost:5173/`
-   - `http://localhost:5173/reset-password`
-   - *(add your production URL equivalents when you deploy)*
+Open the local URL shown in the terminal.
 
-### 5. Get your API keys
+### 3. Sign in and begin development
 
-1. Go to **Settings → API**.
-2. Copy **Project URL** and **anon public key**.  
-   **Never copy the service_role key into frontend code.**
+Register or sign in with your own CoursePilot account. Your local app connects to the team's shared Supabase project, so use your own account and test data.
+
+Work on your assigned feature branch. Coordinate with the team before making changes to shared database tables, storage buckets, or access policies.
+
+To use the deployed website without running it locally, visit:
+https://course-pilot-lovat.vercel.app
 
 ---
 
