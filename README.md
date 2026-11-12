@@ -5,23 +5,52 @@ Built with **React** and **Vite**.
 
 ---
 
+## Branch Guide
+
+| Branch | Purpose |
+|---|---|
+| `main` | Agreed, shared version of the complete website. Only merge here when the team agrees. |
+| `dashboard` | Your current work: dashboard page, layout, design, and background customization. |
+| `learning-assistant` | Development of the AI learning assistant feature. |
+| `planner` | Development of the assignment planner feature. |
+| `vocabulary` | Development of the vocabulary builder feature. |
+
+**Rule:** Each branch contains the full runnable website. Work on your own branch. Do not merge into `main` without team agreement.
+
+---
+
+## Where the website lives
+
+All website code is in the **`website_structure/`** folder.  
+Run all npm commands from inside that folder.
+
+```
+CoursePilot/                ← git repo root
+├── website_structure/      ← ALL website source code is here
+│   ├── src/
+│   │   ├── components/     ← Layout, ComingSoon (shared)
+│   │   ├── pages/          ← Dashboard, Planner, StudyAssistant, Vocabulary
+│   │   ├── App.jsx         ← route definitions
+│   │   ├── main.jsx        ← app entry point
+│   │   └── index.css       ← global styles
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+├── bob_sessions/           ← internal session files (do not edit)
+└── README.md
+```
+
+---
+
 ## Quick Start
 
-Make sure you have **Node.js 18+** installed, then run:
-
 ```bash
+cd website_structure
 npm install
 npm run dev
 ```
 
-Open your browser at **http://localhost:5173**
-
-To build for production:
-
-```bash
-npm run build
-npm run preview   # preview the production build locally
-```
+Open **http://localhost:5173** in your browser.
 
 ---
 
@@ -29,44 +58,28 @@ npm run preview   # preview the production build locally
 
 | Page | Route | File |
 |---|---|---|
-| Dashboard | `/` | `src/pages/Dashboard.jsx` |
-| Planner | `/planner` | `src/pages/Planner.jsx` |
-| Study Assistant | `/study-assistant` | `src/pages/StudyAssistant.jsx` |
-| Vocabulary | `/vocabulary` | `src/pages/Vocabulary.jsx` |
+| Dashboard | `/` | `website_structure/src/pages/Dashboard.jsx` |
+| Planner | `/planner` | `website_structure/src/pages/Planner.jsx` |
+| Study Assistant | `/study-assistant` | `website_structure/src/pages/StudyAssistant.jsx` |
+| Vocabulary | `/vocabulary` | `website_structure/src/pages/Vocabulary.jsx` |
 
 ### Shared components
 
 | Component | File | Purpose |
 |---|---|---|
-| Layout (header + nav + footer) | `src/components/Layout.jsx` | Wraps every page; contains navigation links |
-| Layout styles | `src/components/Layout.module.css` | Header, nav-link, footer styles |
-| ComingSoon | `src/components/ComingSoon.jsx` | Placeholder card shown on unfinished pages |
-| ComingSoon styles | `src/components/ComingSoon.module.css` | Styles for the placeholder card |
-
-### Routing
-
-Routes are defined in `src/App.jsx`.  
-The app uses **React Router v7** with `BrowserRouter` (wrapped in `src/main.jsx`).
+| Layout (header + nav + footer) | `src/components/Layout.jsx` | Wraps every page; contains nav links |
+| ComingSoon | `src/components/ComingSoon.jsx` | Placeholder card for unfinished pages |
 
 ---
 
 ## Working on a page
 
-Each page is a separate file. You only need to edit your own page file (and its matching `.module.css` if you create one). You do not need to touch the Layout or other pages.
-
-Example — adding content to the Planner page:
-
-```jsx
-// src/pages/Planner.jsx
-export default function Planner() {
-  return (
-    <div>
-      <h1>Planner</h1>
-      {/* your content here */}
-    </div>
-  )
-}
-```
+1. Check out your feature branch: `git checkout planner`
+2. `cd website_structure && npm install`
+3. Open your page file (e.g. `src/pages/Planner.jsx`) and replace the `ComingSoon` component with your content.
+4. Run `npm run dev` to preview.
+5. When ready: `npm run build` to check for errors.
+6. Commit and push to **your branch only**.
 
 ---
 
@@ -74,30 +87,32 @@ export default function Planner() {
 
 The Dashboard contains example data clearly labelled **Demo**.  
 Replace it with real data when your feature is ready.  
-The demo data lives at the top of `src/pages/Dashboard.jsx`.
+The demo data lives at the top of `website_structure/src/pages/Dashboard.jsx`.
 
 ---
 
-## Project structure
+## Production build
 
+```bash
+cd website_structure
+npm run build    # output goes to website_structure/dist/ (gitignored)
+npm run preview  # preview the production build locally
 ```
-CoursePilot/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── main.jsx          ← app entry point, sets up Router
-    ├── App.jsx           ← route definitions
-    ├── index.css         ← global reset & base styles
-    ├── components/
-    │   ├── Layout.jsx
-    │   ├── Layout.module.css
-    │   ├── ComingSoon.jsx
-    │   └── ComingSoon.module.css
-    └── pages/
-        ├── Dashboard.jsx
-        ├── Dashboard.module.css
-        ├── Planner.jsx
-        ├── StudyAssistant.jsx
-        └── Vocabulary.jsx
+
+---
+
+## Git workflow summary
+
+```bash
+# Start a new session on your branch
+git checkout dashboard        # or planner, vocabulary, learning-assistant
+cd website_structure
+npm run dev
+
+# Save your work
+git add .
+git commit -m "describe what you changed"
+git push origin dashboard     # push to YOUR branch only
+
+# Never push directly to main — open a PR and get team approval first
 ```
