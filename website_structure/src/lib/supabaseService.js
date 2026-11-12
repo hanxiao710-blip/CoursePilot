@@ -215,6 +215,11 @@ const STORAGE_BUCKET = 'avatars'
 const MAX_FILE_SIZE_MB = 5
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
+/** The fixed storage path used for a user's background image. */
+function bgPath(userId, ext) {
+  return `${userId}/background.${ext}`
+}
+
 /**
  * Upload a background image for a user.
  * Returns the storage path on success, or throws on error.
@@ -232,7 +237,7 @@ export async function uploadBackgroundImage(userId, file) {
   }
 
   const ext = file.name.split('.').pop()
-  const path = `${userId}/background.${ext}`
+  const path = bgPath(userId, ext)
 
   const { error } = await supabase.storage
     .from(STORAGE_BUCKET)
@@ -253,4 +258,18 @@ export async function getBackgroundImageUrl(path) {
     .createSignedUrl(path, 3600)
   if (error) throw error
   return data.signedUrl
+}
+
+/**
+ * Remove a user's background image from storage.
+ * Call updateProfile(userId, { bg_image_path: null }) before or after this
+ * to clear the reference in the profiles table.
+ *
+ * @param {string} storagePath  value previously returned by uploadBackgroundImage
+ */
+export async function removeBackgroundImage(storagePath) {
+  const { error } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .remove([storagePath])
+  if (error) throw error
 }
