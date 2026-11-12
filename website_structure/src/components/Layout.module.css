@@ -94,3 +94,40 @@
   font-size: 0.82rem;
   color: #4a5568;
 }
+
+/* ── User area (right side of header) ── */
+.userArea {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.userEmail {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: none;
+}
+@media (min-width: 768px) {
+  .userEmail { display: inline; }
+}
+
+.signOutBtn {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.signOutBtn:hover {
+  background: rgba(255,255,255,.25);
+}
