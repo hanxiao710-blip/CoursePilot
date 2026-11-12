@@ -1,0 +1,25 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1a202c;
+  background: #f5f7fb;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: #1a56db;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.3;
+}

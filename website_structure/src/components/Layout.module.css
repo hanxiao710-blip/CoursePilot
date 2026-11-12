@@ -1,0 +1,96 @@
+/* ── Layout shell ── */
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.header {
+  background: #1a56db;
+  color: #fff;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  min-height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,.18);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+}
+
+.logo {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.brandName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  display: none;
+}
+@media (min-width: 640px) {
+  .tagline { display: inline; }
+}
+
+/* ── Nav ── */
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.navLink {
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navLink:hover {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+}
+
+.navLink.active {
+  background: rgba(255,255,255,.22);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Main content ── */
+.main {
+  flex: 1;
+  padding: 2rem 1.5rem;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* ── Footer ── */
+.footer {
+  background: #f0f4ff;
+  border-top: 1px solid #dbe4ff;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.82rem;
+  color: #4a5568;
+}

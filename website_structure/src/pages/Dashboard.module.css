@@ -1,0 +1,158 @@
+.page {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pageTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.25rem;
+}
+
+.pageSubtitle {
+  color: #4a5568;
+  margin: 0 0 1.75rem;
+  font-size: 1rem;
+}
+
+/* ── Card grid ── */
+.grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cardWide {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem 1.5rem;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1a56db;
+  margin: 0 0 1rem;
+}
+
+.demoTag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ebf4ff;
+  color: #1a56db;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+/* ── Deadline list ── */
+.deadlineList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.deadlineItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.course {
+  background: #dbe4ff;
+  color: #1a3a8f;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.task {
+  flex: 1 1 auto;
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+
+.due {
+  color: #e53e3e;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Study suggestion ── */
+.suggestion {
+  background: #f0f7ff;
+  border-left: 4px solid #1a56db;
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+}
+
+.suggestionTitle {
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 0.4rem;
+}
+
+.suggestionDetail {
+  color: #4a5568;
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+/* ── Vocabulary list ── */
+.vocabList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.vocabItem {
+  background: #f7faff;
+  border: 1px solid #dbe4ff;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.vocabWord {
+  display: block;
+  font-weight: 700;
+  color: #1a56db;
+  margin-bottom: 0.25rem;
+}
+
+.vocabDef {
+  display: block;
+  color: #4a5568;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
