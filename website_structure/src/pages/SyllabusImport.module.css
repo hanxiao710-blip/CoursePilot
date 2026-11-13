@@ -1,0 +1,393 @@
+/* ── Page layout ── */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pageTitle {
+  margin: 0 0 0.25rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a2332;
+}
+
+.pageSubtitle {
+  margin: 0;
+  color: #57606a;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ── Card ── */
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a2332;
+}
+
+/* ── Mode toggle ── */
+.modeToggle {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.modeBtn {
+  background: #f7f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: #1f2328;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.modeBtn:hover {
+  background: #eef1f7;
+  border-color: #b0b8c5;
+}
+
+.modeBtnActive {
+  background: #dbeafe;
+  border-color: #3b82d4;
+  color: #1e40af;
+  font-weight: 600;
+}
+
+/* ── Hints and labels ── */
+.hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #57606a;
+  line-height: 1.5;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+/* ── Upload area ── */
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.fileInputHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.chooseFileBtn {
+  display: inline-block;
+  background: #f7f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #1f2328;
+  transition: background 0.15s;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chooseFileBtn:hover {
+  background: #eef1f7;
+}
+
+/* ── Error banner ── */
+.error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #991b1b;
+  line-height: 1.5;
+}
+
+/* ── Extracted text preview ── */
+.extractedPreview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.previewHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: #57606a;
+}
+
+.previewTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.65rem;
+  font-family: ui-monospace, 'Cascadia Code', Menlo, monospace;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  resize: vertical;
+  color: #1f2328;
+  background: #f7f8fa;
+}
+
+/* ── Paste textarea ── */
+.pasteTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.65rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  color: #1f2328;
+}
+
+.pasteTextarea:focus {
+  outline: 2px solid #3b82d4;
+  outline-offset: 1px;
+}
+
+/* ── Option row ── */
+.optionRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: 320px;
+}
+
+.textInput {
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1f2328;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.textInput:focus {
+  outline: 2px solid #3b82d4;
+  outline-offset: 1px;
+}
+
+/* ── Action buttons ── */
+.actionBtn {
+  background: #f7f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  color: #1f2328;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: #eef1f7;
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.actionBtnPrimary {
+  background: #1a56db;
+  border-color: #1a56db;
+  color: #fff;
+}
+
+.actionBtnPrimary:hover:not(:disabled) {
+  background: #1748c0;
+}
+
+/* ── Review table ── */
+.tableWrapper {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.table th {
+  background: #f7f8fa;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid #f0f2f5;
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rowReview {
+  background: #fffbeb;
+}
+
+.thCheck,
+.tdCheck {
+  width: 2rem;
+  text-align: center;
+}
+
+.thAction,
+.tdAction {
+  width: 3rem;
+  text-align: center;
+}
+
+.cellInput {
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 0.3rem 0.5rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+  color: #1f2328;
+  background: #fff;
+}
+
+.cellInput:focus {
+  outline: 2px solid #3b82d4;
+  outline-offset: 1px;
+}
+
+/* ── Status badges ── */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badgeOk {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badgeReview {
+  background: #fef9c3;
+  color: #854d0e;
+  cursor: help;
+}
+
+/* ── Remove button ── */
+.removeBtn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.removeBtn:hover {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+/* ── Import row ── */
+.importRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.importCount {
+  font-size: 0.85rem;
+  color: #57606a;
+}
+
+.importWarning {
+  color: #b45309;
+}
+
+/* ── Import result banners ── */
+.importSuccess {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #166534;
+}
+
+.importPartial {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #854d0e;
+}
+
+.importError {
+  margin: 0.25rem 0 0;
+  color: #991b1b;
+  font-size: 0.85rem;
+}

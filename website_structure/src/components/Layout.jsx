@@ -3,10 +3,11 @@ import { useAuth } from '../context/useAuth'
 import styles from './Layout.module.css'
 
 const navItems = [
-  { to: '/',                label: 'Dashboard'       },
-  { to: '/planner',         label: 'Planner'         },
-  { to: '/study-assistant', label: 'Study Assistant' },
-  { to: '/vocabulary',      label: 'Vocabulary'      },
+  { to: '/',                 label: 'Dashboard'       },
+  { to: '/planner',          label: 'Planner'         },
+  { to: '/study-assistant',  label: 'Study Assistant' },
+  { to: '/vocabulary',       label: 'Vocabulary'      },
+  { to: '/syllabus-import',  label: 'Syllabus Import' },
 ]
 
 export default function Layout() {
