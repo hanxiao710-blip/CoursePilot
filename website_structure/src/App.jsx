@@ -5,7 +5,6 @@ import Dashboard from './pages/Dashboard'
 import Planner from './pages/Planner'
 import StudyAssistant from './pages/StudyAssistant'
 import Vocabulary from './pages/Vocabulary'
-import SyllabusImport from './pages/SyllabusImport'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
@@ -29,10 +28,11 @@ function App() {
         }
       >
         <Route index element={<Dashboard />} />
-        <Route path="planner"        element={<Planner />} />
+        <Route path="planner"         element={<Planner />} />
         <Route path="study-assistant" element={<StudyAssistant />} />
-        <Route path="vocabulary"     element={<Vocabulary />} />
-        <Route path="syllabus-import" element={<SyllabusImport />} />
+        <Route path="vocabulary"      element={<Vocabulary />} />
+        {/* Redirect old standalone page → Planner (which now hosts the import) */}
+        <Route path="syllabus-import" element={<Navigate to="/planner" replace />} />
       </Route>
 
       {/* Catch-all */}

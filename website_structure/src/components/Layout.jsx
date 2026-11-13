@@ -7,7 +7,6 @@ const navItems = [
   { to: '/planner',          label: 'Planner'         },
   { to: '/study-assistant',  label: 'Study Assistant' },
   { to: '/vocabulary',       label: 'Vocabulary'      },
-  { to: '/syllabus-import',  label: 'Syllabus Import' },
 ]
 
 export default function Layout() {

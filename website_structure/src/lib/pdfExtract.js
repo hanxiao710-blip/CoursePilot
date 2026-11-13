@@ -2,70 +2,61 @@
  * pdfExtract.js
  *
  * Client-side PDF text extraction using pdfjs-dist.
- * Returns the full plain-text content of a PDF File object.
- * Never calls any Edge Function or AI API.
+ * No AI, no network calls — runs entirely in the browser.
+ *
+ * Extracted from syllabusAnalysis.js when the AI-powered import
+ * path was removed in favour of the client-side rule-based parser.
  */
 
 import * as pdfjsLib from 'pdfjs-dist'
 
-// Point the worker at the bundled worker file (served from /node_modules via Vite).
-// Using a CDN URL avoids the complex worker bundling configuration.
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+// Point the worker at the copy bundled with pdfjs-dist so Vite can resolve it.
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.mjs',
+  import.meta.url
+).href
+
+export const MAX_PDF_SIZE_MB = 10
 
 /**
- * Extract all text from a PDF File.
+ * Extract plain text from a PDF File object.
  *
- * @param {File} file  A PDF File object from an <input type="file"> or drag-drop.
- * @returns {Promise<{ text: string, pageCount: number }>}
- * @throws {Error}  With a human-readable message on failure.
+ * @param {File} file
+ * @param {(msg: string) => void} [onStatus]  optional progress callback
+ * @returns {Promise<string>}  extracted text
+ * @throws {Error}  with a user-facing message on failure
  */
-export async function extractTextFromPDF(file) {
-  if (!file || file.type !== 'application/pdf') {
-    throw new Error('Please select a valid PDF file.')
+export async function extractTextFromPdf(file, onStatus) {
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    throw new Error('Please upload a PDF file (.pdf).')
+  }
+  if (file.size > MAX_PDF_SIZE_MB * 1024 * 1024) {
+    throw new Error(`The file is too large. Please upload a PDF smaller than ${MAX_PDF_SIZE_MB} MB.`)
   }
 
-  let arrayBuffer
-  try {
-    arrayBuffer = await file.arrayBuffer()
-  } catch {
-    throw new Error('Could not read the file. Make sure it is not locked or corrupted.')
-  }
+  onStatus?.('Reading PDF…')
 
-  let pdf
-  try {
-    pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-  } catch (err) {
-    throw new Error(
-      `PDF could not be opened: ${err?.message ?? String(err)}. ` +
-      'Only text-based PDFs are supported — scanned image PDFs are not.'
-    )
-  }
+  const arrayBuffer = await file.arrayBuffer()
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
 
-  const pageCount = pdf.numPages
+  onStatus?.(`Extracting text from ${pdf.numPages} page${pdf.numPages !== 1 ? 's' : ''}…`)
+
   const pageTexts = []
-
-  for (let i = 1; i <= pageCount; i++) {
-    let page
-    try {
-      page = await pdf.getPage(i)
-    } catch {
-      // Skip unreadable pages rather than aborting entirely.
-      pageTexts.push('')
-      continue
-    }
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page    = await pdf.getPage(i)
     const content = await page.getTextContent()
-    // Join items on the same line with a space; separate lines with newline.
-    const lineText = content.items.map((item) => item.str).join(' ')
-    pageTexts.push(lineText)
+    const text    = content.items.map(item => item.str).join(' ')
+    pageTexts.push(text)
   }
 
-  const text = pageTexts.join('\n')
-  if (!text.trim()) {
+  const fullText = pageTexts.join('\n\n').trim()
+
+  if (!fullText) {
     throw new Error(
-      'No readable text was found in this PDF. ' +
-      'It may be a scanned image — please paste the text manually instead.'
+      'This PDF appears to contain only scanned images — no selectable text was found. ' +
+      'Please try copying and pasting the syllabus text directly instead.'
     )
   }
 
-  return { text, pageCount }
+  return fullText
 }
