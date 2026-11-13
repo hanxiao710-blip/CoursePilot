@@ -148,8 +148,6 @@ function extractBearer(req) {
 
 // ── Main handler ───────────────────────────────────────────────────────────
 
-export const config = { runtime: 'nodejs' }
-
 export default async function handler(req) {
   // ── CORS pre-flight ──
   if (req.method === 'OPTIONS') {
