@@ -387,6 +387,26 @@
   margin: 1rem 1.5rem 0;
 }
 
+.fallbackNote {
+  font-size: 0.85rem;
+  color: #744210;
+  background: #fff8f0;
+  border: 1px solid #f6ad55;
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  margin: 1rem 1.5rem 0;
+}
+
+.modelNote {
+  font-size: 0.82rem;
+  color: #276749;
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  margin: 1rem 1.5rem 0;
+}
+
 
 /* ── Default course row ── */
 .courseRow {

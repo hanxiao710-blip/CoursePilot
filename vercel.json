@@ -1,0 +1,21 @@
+{
+  "buildCommand": "cd website_structure && npm install && npm run build",
+  "outputDirectory": "website_structure/dist",
+  "installCommand": "cd website_structure && npm install",
+  "framework": null,
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs22.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
