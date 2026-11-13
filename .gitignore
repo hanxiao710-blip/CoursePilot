@@ -19,3 +19,7 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Local secrets — never commit
+.secrets
+*.secrets
