@@ -1,5 +1,6 @@
 import { useState, useRef, lazy, Suspense } from 'react'
 import { parseSyllabus } from '../lib/syllabusParser'
+import { useAuth } from '../context/useAuth'
 import styles from './SyllabusImport.module.css'
 
 // Lazy-load pdfjs-dist only when the panel is first opened.
@@ -11,19 +12,35 @@ async function getPdfExtractor() {
   return pdfModule.extractTextFromPdf
 }
 
-// Lazy-load the review table (unchanged — still the same component)
+// Lazy-load the review table
 const SyllabusReviewTable = lazy(() => import('./SyllabusReviewTable'))
 
+// ── Endpoint ──────────────────────────────────────────────────────────────
+const EXTRACT_ENDPOINT = '/api/extract-syllabus'
+
+// ── Adapters ──────────────────────────────────────────────────────────────
+
 /**
- * Adapt a ParsedEntry (from syllabusParser.js) to the ExtractedAssignment
- * shape that SyllabusReviewTable expects.
- *
- * ParsedEntry fields:  title, course, deadline, raw, needsReview, reviewReason
- * ExtractedAssignment: title, course, deadline, event_type, source_excerpt,
- *                      confidence, notes
+ * Adapt a Gemini API assignment (from /api/extract-syllabus) to the
+ * shape SyllabusReviewTable expects.
  */
-function adaptEntry(entry) {
-  // Infer event_type from the title / raw line
+function adaptGeminiEntry(entry) {
+  return {
+    title:          entry.title,
+    course:         entry.course ?? '',
+    deadline:       entry.deadline ?? '',
+    event_type:     entry.event_type ?? 'assignment',
+    source_excerpt: entry.source_excerpt ?? '',
+    confidence:     entry.confidence ?? 'low',
+    notes:          entry.notes ?? '',
+  }
+}
+
+/**
+ * Adapt a ParsedEntry (from syllabusParser.js fallback) to the
+ * shape SyllabusReviewTable expects.
+ */
+function adaptParserEntry(entry) {
   const lower = (entry.title + ' ' + entry.raw).toLowerCase()
   let event_type = 'assignment'
   if (/\bexam\b|\bmidterm\b|\bfinal\b/.test(lower))         event_type = 'exam'
@@ -32,7 +49,6 @@ function adaptEntry(entry) {
   else if (/\bpresentation\b/.test(lower))                  event_type = 'presentation'
   else if (/\bessay\b|\bpaper\b|\breport\b/.test(lower))    event_type = 'essay'
 
-  // Map needsReview → confidence level
   let confidence = 'high'
   if (entry.needsReview) {
     confidence = entry.deadline === null ? 'ambiguous' : 'low'
@@ -41,21 +57,41 @@ function adaptEntry(entry) {
   return {
     title:          entry.title,
     course:         entry.course ?? '',
-    deadline:       entry.deadline ?? '',      // empty string = blank date input
+    deadline:       entry.deadline ?? '',
     event_type,
     source_excerpt: entry.raw,
     confidence,
-    notes:          entry.reviewReason ?? '',
+    notes:          entry.reviewReason
+      ? `[Rule-based fallback] ${entry.reviewReason}`
+      : '[Rule-based fallback]',
   }
 }
+
+// ── Duplicate filter ──────────────────────────────────────────────────────
+
+function deduplicateAgainstExisting(adapted, existingAssignments) {
+  const keyOf = (course, title, deadline) =>
+    `${(course ?? '').toLowerCase().trim()}||${(title ?? '').toLowerCase().trim()}||${deadline ?? ''}`
+  const existingKeys = new Set(
+    existingAssignments.map(a => keyOf(a.course, a.title, a.deadline))
+  )
+  const unique     = adapted.filter(a => !existingKeys.has(keyOf(a.course, a.title, a.deadline)))
+  const dupCount   = adapted.length - unique.length
+  return { unique, dupCount }
+}
+
+// ── August-10 problem: test syllabus ─────────────────────────────────────
+// (kept as a comment for manual testing reference)
+// The rule-based parser previously returned 8 "August 10" false deadlines
+// from lines like "Syllabus updated August 10, 2026." — Gemini's prompt
+// explicitly excludes administrative dates.
 
 /**
  * SyllabusImport
  *
  * Modal panel used by Planner → "Import Syllabus".
- * Extracts assignment deadlines from a PDF or pasted text using the
- * client-side rule-based parser (syllabusParser.js). No AI or Edge
- * Function is called.
+ * Primary path: POST /api/extract-syllabus (Gemini 3.1 Flash Lite, server-side).
+ * Fallback path: client-side rule-based parser (syllabusParser.js), clearly labelled.
  *
  * Props
  *   existingAssignments  – current Planner rows (for duplicate detection)
@@ -63,6 +99,8 @@ function adaptEntry(entry) {
  *   onClose()            – close the panel
  */
 export default function SyllabusImport({ existingAssignments = [], onImport, onClose }) {
+  const { session } = useAuth()
+
   // ── Input mode ──
   const [mode, setMode] = useState('paste')   // 'pdf' | 'paste'
 
@@ -78,9 +116,11 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
   const [defaultCourse, setDefaultCourse] = useState('')
 
   // ── Extraction state ──
-  const [status, setStatus]           = useState('')
-  const [extracting, setExtracting]   = useState(false)
+  const [status, setStatus]             = useState('')
+  const [extracting, setExtracting]     = useState(false)
   const [extractError, setExtractError] = useState(null)
+  const [usedFallback, setUsedFallback] = useState(false)
+  const [modelUsed, setModelUsed]       = useState(null)
 
   // ── Results state ──
   const [extracted, setExtracted]           = useState(null)   // null = not yet run
@@ -89,17 +129,14 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
   // step = 'input' | 'review'
   const step = extracted === null ? 'input' : 'review'
 
-  // ─────────────────────────────────────────────────────────────
-  // File selection
-  // ─────────────────────────────────────────────────────────────
-
   const MAX_PDF_MB = 10
+
+  // ── File selection ───────────────────────────────────────────────────────
 
   function handleFileChange(e) {
     setPdfError(null)
     const file = e.target.files?.[0]
     if (!file) { setPdfFile(null); return }
-
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
       setPdfError('Only PDF files are supported. Please choose a .pdf file.')
       setPdfFile(null)
@@ -113,9 +150,7 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
     setPdfFile(file)
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // Extract dates
-  // ─────────────────────────────────────────────────────────────
+  // ── Extraction ───────────────────────────────────────────────────────────
 
   async function handleExtract() {
     setPdfError(null)
@@ -123,6 +158,8 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
     setStatus('')
     setExtracted(null)
     setDuplicatesFound(0)
+    setUsedFallback(false)
+    setModelUsed(null)
 
     try {
       setExtracting(true)
@@ -146,25 +183,76 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
         text = pastedText.trim()
       }
 
-      // Step 2: rule-based parsing (no AI, no network call)
-      setStatus('Scanning for deadlines…')
-      const parsed = parseSyllabus(text, {
-        course: defaultCourse.trim() || undefined,
-      })
+      // Apply default course prefix if set
+      const fullText = defaultCourse.trim()
+        ? `Course: ${defaultCourse.trim()}\n\n${text}`
+        : text
 
-      // Step 3: adapt to review table shape
-      const adapted = parsed.map(adaptEntry)
+      // Step 2: Try Gemini endpoint
+      let adapted
+      let fellBack = false
+      let model = null
 
-      // Step 4: remove exact duplicates already in the Planner
-      const keyOf = (course, title, deadline) =>
-        `${(course ?? '').toLowerCase().trim()}||${(title ?? '').toLowerCase().trim()}||${deadline ?? ''}`
-      const existingKeys = new Set(
-        existingAssignments.map(a => keyOf(a.course, a.title, a.deadline))
-      )
-      const unique = adapted.filter(
-        a => !existingKeys.has(keyOf(a.course, a.title, a.deadline))
-      )
-      setDuplicatesFound(adapted.length - unique.length)
+      setStatus('Extracting dates…')
+
+      const jwt = session?.access_token
+      if (!jwt) {
+        throw new Error('You are not signed in. Please refresh the page and sign in again.')
+      }
+
+      try {
+        const resp = await fetch(EXTRACT_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${jwt}`,
+          },
+          body: JSON.stringify({ text: fullText }),
+        })
+
+        if (!resp.ok) {
+          const errData = await resp.json().catch(() => ({}))
+          const code = errData.code ?? 'UNKNOWN'
+          const msg  = errData.error ?? `Server error (HTTP ${resp.status})`
+
+          // For quota/unavailable errors try the fallback
+          if (code === 'QUOTA_EXCEEDED' || code === 'MODEL_UNAVAILABLE' || code === 'TIMEOUT') {
+            console.warn('[SyllabusImport] Gemini unavailable, using rule-based fallback:', msg)
+            fellBack = true
+          } else {
+            throw new Error(msg)
+          }
+        } else {
+          const data = await resp.json()
+          adapted = data.assignments.map(adaptGeminiEntry)
+          model = data.model ?? null
+        }
+      } catch (fetchErr) {
+        // Network error (offline) — fall back to rule-based parser
+        if (fetchErr.name === 'TypeError' || fellBack) {
+          console.warn('[SyllabusImport] Falling back to rule-based parser:', fetchErr.message)
+          fellBack = true
+        } else {
+          throw fetchErr
+        }
+      }
+
+      // Step 2b: Rule-based fallback (explicitly labelled)
+      if (fellBack) {
+        setUsedFallback(true)
+        setStatus('Gemini unavailable — using rule-based extraction…')
+        const parsed = parseSyllabus(fullText, {
+          course: defaultCourse.trim() || undefined,
+        })
+        adapted = parsed.map(adaptParserEntry)
+      } else {
+        setUsedFallback(false)
+        setModelUsed(model)
+      }
+
+      // Step 3: Deduplicate against existing Planner entries
+      const { unique, dupCount } = deduplicateAgainstExisting(adapted, existingAssignments)
+      setDuplicatesFound(dupCount)
       setExtracted(unique)
       setStatus('')
     } catch (err) {
@@ -184,11 +272,11 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
     setExtractError(null)
     setStatus('')
     setDuplicatesFound(0)
+    setUsedFallback(false)
+    setModelUsed(null)
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // Render
-  // ─────────────────────────────────────────────────────────────
+  // ── Render ───────────────────────────────────────────────────────────────
 
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-label="Import Syllabus">
@@ -200,7 +288,6 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
             <h2 className={styles.panelTitle}>📄 Import Syllabus</h2>
             <p className={styles.panelSubtitle}>
               Upload or paste your syllabus to extract assignment deadlines.
-              Works entirely in your browser — no AI or internet connection needed.
             </p>
           </div>
           <button
@@ -224,9 +311,9 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
           </span>
         </div>
 
-        {/* ══════════════════════════════════════════════════ */}
-        {/* STEP 1 — INPUT                                    */}
-        {/* ══════════════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════════ */}
+        {/* STEP 1 — INPUT                                  */}
+        {/* ════════════════════════════════════════════════ */}
         {step === 'input' && (
           <div className={styles.inputStep}>
 
@@ -339,7 +426,7 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
             {/* Extraction error */}
             {extractError && (
               <div className={styles.analysisError} role="alert">
-                <strong>⚠ Could not read syllabus</strong>
+                <strong>⚠ Could not extract dates</strong>
                 <p>{extractError}</p>
               </div>
             )}
@@ -369,17 +456,36 @@ export default function SyllabusImport({ existingAssignments = [], onImport, onC
           </div>
         )}
 
-        {/* ══════════════════════════════════════════════════ */}
-        {/* STEP 2 — REVIEW                                   */}
-        {/* ══════════════════════════════════════════════════ */}
+        {/* ════════════════════════════════════════════════ */}
+        {/* STEP 2 — REVIEW                                 */}
+        {/* ════════════════════════════════════════════════ */}
         {step === 'review' && extracted !== null && (
           <div className={styles.reviewStep}>
+
+            {/* Fallback notice */}
+            {usedFallback && (
+              <p className={styles.fallbackNote} role="status">
+                ⚠ Gemini was temporarily unavailable.
+                Results below were extracted using the <strong>rule-based fallback</strong> —
+                accuracy may be lower. Please review carefully.
+              </p>
+            )}
+
+            {/* Model used notice */}
+            {!usedFallback && modelUsed && (
+              <p className={styles.modelNote} role="status">
+                ✓ Extracted using <strong>{modelUsed}</strong>. Review and correct before importing.
+              </p>
+            )}
+
+            {/* Duplicates removed */}
             {duplicatesFound > 0 && (
               <p className={styles.dupNote} role="status">
                 ℹ {duplicatesFound} assignment{duplicatesFound !== 1 ? 's' : ''} already in your
                 Planner {duplicatesFound !== 1 ? 'were' : 'was'} removed to avoid duplicates.
               </p>
             )}
+
             <Suspense fallback={<p className={styles.statusMsg} style={{padding:'1.5rem'}}>Loading review table…</p>}>
               <SyllabusReviewTable
                 extracted={extracted}
