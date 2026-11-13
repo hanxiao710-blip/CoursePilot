@@ -98,11 +98,16 @@ CoursePilot/
    - `http://localhost:5173/reset-password`
    - *(add your production URL equivalents when you deploy)*
 
-### 5. Get your API keys
+### 5. Supabase credentials (shared project — already set up)
 
-1. Go to **Settings → API**.
-2. Copy **Project URL** and **anon public key**.  
-   **Never copy the service_role key into frontend code.**
+The team project is already created. Use these values — they are the **public** anon key and are safe to include in frontend code:
+
+| Variable | Value |
+|---|---|
+| `VITE_SUPABASE_URL` | `https://kwzhkwzrwahiejjlkycn.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | `sb_publishable_WgNJEF9Q5EU4lPv9TXgZtA_-eKXWfd7` |
+
+> ⚠️ **Never** copy the `service_role` key into frontend code — that one must stay private.
 
 ---
 
@@ -119,7 +124,9 @@ npm install
 
 # 3. Create your local environment file
 cp .env.example .env.local
-# Open .env.local and fill in your Supabase URL and anon key
+# Or create it manually with these exact values:
+#   VITE_SUPABASE_URL=https://kwzhkwzrwahiejjlkycn.supabase.co
+#   VITE_SUPABASE_ANON_KEY=sb_publishable_WgNJEF9Q5EU4lPv9TXgZtA_-eKXWfd7
 
 # 4. Start the dev server
 npm run dev
