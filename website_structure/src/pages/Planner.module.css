@@ -31,6 +31,33 @@
   font-size: 1rem;
 }
 
+/* ── Header button group ── */
+.headerBtns {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+/* ── Import Syllabus button ── */
+.importBtn {
+  background: #fff;
+  color: #1a56db;
+  border: 1.5px solid #1a56db;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.92rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.importBtn:hover {
+  background: #ebf4ff;
+}
+
 /* ── Add Assignment button ── */
 .addBtn {
   background: #1a56db;
@@ -49,6 +76,18 @@
 }
 .addBtn:hover {
   background: #1747c0;
+}
+
+/* ── Import success banner ── */
+.importSuccess {
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  border-radius: 7px;
+  color: #276749;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  margin-bottom: 1rem;
 }
 
 /* ── Add assignment form card ── */
@@ -463,8 +502,12 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .addBtn {
+  .headerBtns {
     width: 100%;
+  }
+  .addBtn,
+  .importBtn {
+    flex: 1;
     text-align: center;
   }
   .item {

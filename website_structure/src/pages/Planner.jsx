@@ -5,7 +5,9 @@ import {
   createAssignment,
   setAssignmentCompleted,
   deleteAssignment,
+  bulkCreateAssignments,
 } from '../lib/supabaseService'
+import SyllabusImport from '../components/SyllabusImport'
 import styles from './Planner.module.css'
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -76,6 +78,10 @@ export default function Planner() {
   const [loading, setLoading]         = useState(true)
   const [loadError, setLoadError]     = useState(null)
 
+  // ── Syllabus import state ──
+  const [showImport, setShowImport]     = useState(false)
+  const [importSuccess, setImportSuccess] = useState(null)   // success message
+
   // ── Form state ──
   const [showForm, setShowForm]   = useState(false)
   const [course, setCourse]       = useState('')
@@ -109,6 +115,27 @@ export default function Planner() {
     }
     load()
   }, [user])
+
+  // ── Syllabus import: save confirmed rows ──
+  async function handleSyllabusImport(confirmedRows) {
+    const { data, error } = await bulkCreateAssignments(user.id, confirmedRows)
+    if (error) {
+      // Propagate to SyllabusReviewTable which will display it
+      throw new Error(error.message ?? 'Could not save assignments.')
+    }
+    // Merge new rows into local state, re-sort by deadline
+    setAssignments(prev => {
+      const next = [...prev, ...(data ?? [])]
+      next.sort((a, b) => (a.deadline > b.deadline ? 1 : -1))
+      return next
+    })
+    setShowImport(false)
+    setImportSuccess(
+      `${confirmedRows.length} assignment${confirmedRows.length !== 1 ? 's' : ''} added successfully!`
+    )
+    // Auto-clear success message after 5 s
+    setTimeout(() => setImportSuccess(null), 5000)
+  }
 
   // ── Add assignment ──
   async function handleSubmit(e) {
@@ -190,6 +217,15 @@ export default function Planner() {
   return (
     <div className={styles.page}>
 
+      {/* ── Syllabus Import modal ── */}
+      {showImport && (
+        <SyllabusImport
+          existingAssignments={assignments}
+          onImport={handleSyllabusImport}
+          onClose={() => setShowImport(false)}
+        />
+      )}
+
       {/* ── Page header ── */}
       <div className={styles.pageHeader}>
         <div>
@@ -198,14 +234,28 @@ export default function Planner() {
             Manage your assignments, track deadlines, and stay on schedule.
           </p>
         </div>
-        <button
-          className={styles.addBtn}
-          onClick={() => { setShowForm(f => !f); setFormError(null) }}
-          aria-expanded={showForm}
-        >
-          {showForm ? '✕ Cancel' : '+ Add Assignment'}
-        </button>
+        <div className={styles.headerBtns}>
+          <button
+            className={styles.importBtn}
+            onClick={() => { setShowImport(true); setImportSuccess(null) }}
+            aria-label="Import syllabus"
+          >
+            📄 Import Syllabus
+          </button>
+          <button
+            className={styles.addBtn}
+            onClick={() => { setShowForm(f => !f); setFormError(null) }}
+            aria-expanded={showForm}
+          >
+            {showForm ? '✕ Cancel' : '+ Add Assignment'}
+          </button>
+        </div>
       </div>
+
+      {/* ── Import success banner ── */}
+      {importSuccess && (
+        <p className={styles.importSuccess} role="status">✓ {importSuccess}</p>
+      )}
 
       {/* ── Add assignment form ── */}
       {showForm && (
