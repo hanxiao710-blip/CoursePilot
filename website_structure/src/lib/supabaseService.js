@@ -99,6 +99,27 @@ export async function deleteAssignment(assignmentId) {
     .eq('id', assignmentId)
 }
 
+/**
+ * Bulk-insert multiple assignments for a user (Syllabus Import).
+ * Returns the inserted rows on success.
+ *
+ * @param {string} userId
+ * @param {{ course: string, title: string, deadline: string }[]} assignments
+ */
+export async function bulkCreateAssignments(userId, assignments) {
+  const rows = assignments.map(a => ({
+    user_id:   userId,
+    course:    a.course,
+    title:     a.title,
+    deadline:  a.deadline,
+    completed: false,
+  }))
+  return supabase
+    .from('assignments')
+    .insert(rows)
+    .select()
+}
+
 // ─────────────────────────────────────────────
 // VOCABULARY
 // ─────────────────────────────────────────────
