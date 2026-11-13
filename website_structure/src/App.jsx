@@ -28,9 +28,11 @@ function App() {
         }
       >
         <Route index element={<Dashboard />} />
-        <Route path="planner"        element={<Planner />} />
+        <Route path="planner"         element={<Planner />} />
         <Route path="study-assistant" element={<StudyAssistant />} />
-        <Route path="vocabulary"     element={<Vocabulary />} />
+        <Route path="vocabulary"      element={<Vocabulary />} />
+        {/* Redirect old standalone page → Planner (which now hosts the import) */}
+        <Route path="syllabus-import" element={<Navigate to="/planner" replace />} />
       </Route>
 
       {/* Catch-all */}
