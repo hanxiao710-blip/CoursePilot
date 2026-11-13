@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd website_structure && npm install && npm run build",
-  "outputDirectory": "website_structure/dist",
-  "installCommand": "cd website_structure && npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
   "framework": null,
   "functions": {
     "api/**/*.js": {
