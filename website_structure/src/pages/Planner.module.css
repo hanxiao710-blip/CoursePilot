@@ -1,0 +1,478 @@
+/* ── Page ── */
+.page {
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Page header (title + Add button) ── */
+.pageHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.25rem;
+}
+
+.pageSubtitle {
+  color: #4a5568;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* ── Add Assignment button ── */
+.addBtn {
+  background: #1a56db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+  transition: background 0.15s;
+}
+.addBtn:hover {
+  background: #1747c0;
+}
+
+/* ── Add assignment form card ── */
+.formCard {
+  background: #fff;
+  border: 1px solid #dbe4ff;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.formTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a56db;
+  margin: 0 0 1rem;
+}
+
+.formGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.input {
+  padding: 0.45rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #1a202c;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+.input:focus {
+  outline: none;
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.15);
+}
+.input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: #f7fafc;
+}
+
+.formError {
+  color: #c53030;
+  font-size: 0.88rem;
+  margin: 0.75rem 0 0;
+}
+
+.formActions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.saveBtn {
+  background: #1a56db;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.saveBtn:hover:not(:disabled) {
+  background: #1747c0;
+}
+.saveBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Filter bar ── */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 0.3rem 0.85rem;
+  font-size: 0.88rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.filterBtn:hover {
+  background: #ebf4ff;
+  border-color: #bee3f8;
+  color: #1a56db;
+}
+.filterBtnActive {
+  background: #1a56db;
+  border-color: #1a56db;
+  color: #fff;
+  font-weight: 600;
+}
+.filterBtnActive:hover {
+  background: #1747c0;
+  border-color: #1747c0;
+  color: #fff;
+}
+
+.filterCount {
+  background: rgba(0,0,0,.1);
+  border-radius: 10px;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  min-width: 1.2rem;
+  text-align: center;
+}
+.filterBtnActive .filterCount {
+  background: rgba(255,255,255,.25);
+}
+
+/* ── Assignment list ── */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ── Assignment item ── */
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.item:hover {
+  border-color: #bee3f8;
+  box-shadow: 0 2px 6px rgba(26,86,219,.08);
+}
+
+.itemCompleted {
+  background: #f9fafb;
+  border-color: #e2e8f0;
+  opacity: 0.8;
+}
+
+/* Checkbox toggle */
+.checkbox {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e0;
+  background: transparent;
+  color: transparent;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  margin-top: 2px;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.checkbox:hover:not(:disabled) {
+  border-color: #48bb78;
+  background: #f0fff4;
+  color: #276749;
+}
+.checkbox:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.checkboxDone {
+  border-color: #48bb78;
+  background: #48bb78;
+  color: #fff;
+}
+.checkboxDone:hover:not(:disabled) {
+  border-color: #2f855a;
+  background: #2f855a;
+  color: #fff;
+}
+
+/* Item content */
+.itemContent {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.itemTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+}
+
+.coursePill {
+  background: #dbe4ff;
+  color: #1a3a8f;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.itemTitle {
+  margin: 0 0 0.2rem;
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: #1a202c;
+  line-height: 1.4;
+  word-break: break-word;
+}
+.itemTitleDone {
+  text-decoration: line-through;
+  color: #a0aec0;
+}
+
+.itemDate {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #718096;
+}
+
+/* Item action buttons */
+.itemActions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 2px;
+}
+
+.actionBtn {
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.actionBtn:hover:not(:disabled) {
+  background: #f7fafc;
+  border-color: #a0aec0;
+}
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actionBtnDelete {
+  font-size: 0.9rem;
+  border-color: transparent;
+}
+.actionBtnDelete:hover:not(:disabled) {
+  background: #fff5f5;
+  border-color: #feb2b2;
+  color: #c53030;
+}
+
+.actionBtnDanger {
+  background: #c53030;
+  color: #fff;
+  border-color: #c53030;
+}
+.actionBtnDanger:hover {
+  background: #9b2c2c;
+  border-color: #9b2c2c;
+}
+
+.confirmMsg {
+  font-size: 0.82rem;
+  color: #c53030;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Status badges ── */
+.badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  /* Default: upcoming */
+  background: #edf2f7;
+  color: #4a5568;
+}
+
+.badge_upcoming {
+  background: #edf2f7;
+  color: #4a5568;
+}
+
+.badge_soon {
+  background: #feebc8;
+  color: #7b341e;
+}
+
+.badge_today {
+  background: #fefcbf;
+  color: #744210;
+}
+
+.badge_overdue {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+.badge_completed {
+  background: #f0fff4;
+  color: #276749;
+}
+
+/* ── State messages ── */
+.stateMsg {
+  color: #718096;
+  font-size: 0.9rem;
+  margin: 1rem 0 0;
+}
+
+.stateError {
+  color: #c53030;
+  font-size: 0.9rem;
+  margin: 1rem 0 0;
+}
+
+.actionError {
+  color: #c53030;
+  font-size: 0.88rem;
+  margin: 0 0 0.75rem;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+/* ── Empty state ── */
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.emptyIcon {
+  font-size: 2.5rem;
+  margin: 0 0 0.75rem;
+  line-height: 1;
+}
+
+.emptyMsg {
+  color: #718096;
+  font-size: 0.95rem;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Mobile adjustments ── */
+@media (max-width: 480px) {
+  .pageTitle {
+    font-size: 1.4rem;
+  }
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .addBtn {
+    width: 100%;
+    text-align: center;
+  }
+  .item {
+    flex-wrap: wrap;
+  }
+  .itemActions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+}
