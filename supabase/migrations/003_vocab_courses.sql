@@ -188,4 +188,75 @@ alter table public.vocabulary
 alter table public.vocabulary
   add column if not exists candidate_id uuid;
 
--- session_id: l
+-- session_id: links this word to a specific class session
+-- nullable — words added before this migration, or not linked to a session, are NULL
+alter table public.vocabulary
+  add column if not exists session_id uuid references public.sessions(id) on delete set null;
+
+-- RLS guard: vocabulary INSERT must only reference a session that belongs to the
+-- inserting user (or no session at all). Without this, a user could INSERT a row
+-- whose session_id points to another user's session.
+drop policy if exists "Users can insert own vocabulary" on public.vocabulary;
+create policy "Users can insert own vocabulary"
+  on public.vocabulary for insert
+  with check (
+    auth.uid() = user_id
+    and (
+      session_id is null
+      or exists (
+        select 1 from public.sessions s
+        where s.id = session_id and s.user_id = auth.uid()
+      )
+    )
+  );
+
+-- ============================================================
+-- 4. Indexes for efficient per-session, per-review, and idempotent-save queries
+-- ============================================================
+
+-- Unique index enabling ON CONFLICT DO NOTHING for idempotent saves.
+-- A (user_id, session_id, candidate_id) triple must be unique when candidate_id
+-- is not null. This prevents double-saves on network retry.
+create unique index if not exists idx_vocabulary_candidate_id
+  on public.vocabulary (user_id, session_id, candidate_id)
+  where candidate_id is not null;
+
+create index if not exists idx_vocabulary_session_id
+  on public.vocabulary (session_id)
+  where session_id is not null;
+
+create index if not exists idx_vocabulary_user_next_review
+  on public.vocabulary (user_id, next_review);
+
+create index if not exists idx_sessions_course_id
+  on public.sessions (course_id);
+
+-- ============================================================
+-- 5. Verification
+-- ============================================================
+-- Run this block to confirm the migration applied cleanly.
+
+select
+  column_name,
+  data_type,
+  is_nullable
+from information_schema.columns
+where table_schema = 'public'
+  and table_name   = 'vocabulary'
+order by ordinal_position;
+
+-- Expected new columns:
+--   item_type, chinese, zh_explanation, course_context,
+--   en_example, zh_example, abbreviation, source_note,
+--   source_excerpt, source_material_name (all nullable)
+--   user_edited (NOT NULL DEFAULT false)
+--   candidate_id (nullable uuid — idempotent save key)
+--   session_id   (nullable uuid — foreign key to sessions)
+
+select table_name from information_schema.tables
+where table_schema = 'public'
+  and table_name in ('courses','sessions')
+order by table_name;
+-- Expected: courses, sessions
+
+commit;
