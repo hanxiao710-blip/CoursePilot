@@ -1,0 +1,977 @@
+/* Vocabulary.module.css */
+
+/* ── Page shell ───────────────────────────────────────────────────────────── */
+
+.page {
+  max-width: 860px;
+  animation: fadeIn 0.25s ease;
+}
+
+@media (max-width: 600px) {
+  .tabs { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .tab { white-space: nowrap; min-height: 44px; padding: .7rem .4rem !important; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pageHeader {
+  margin-bottom: 1.5rem;
+}
+
+.pageTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.25rem;
+}
+
+.pageSubtitle {
+  color: #4a5568;
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* ── Input panel ─────────────────────────────────────────────────────────── */
+
+.inputPanel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.inputRow {
+  margin-bottom: 1.1rem;
+}
+
+.inputLabel {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2d3748;
+  margin-bottom: 0.4rem;
+}
+
+.optional {
+  font-weight: 400;
+  color: #718096;
+  font-size: 0.82rem;
+}
+
+.charCount {
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: #718096;
+}
+
+.charOver {
+  color: #e53e3e;
+  font-weight: 600;
+}
+
+.textInput {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #1a202c;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26,86,219,.15);
+}
+
+.textInput:disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+}
+
+.textareaInput {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.93rem;
+  font-family: inherit;
+  line-height: 1.6;
+  color: #1a202c;
+  background: #fff;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.textareaInput:focus {
+  outline: none;
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26,86,219,.15);
+}
+
+.textareaInput:disabled {
+  background: #f7fafc;
+  color: #a0aec0;
+}
+
+.textareaOver {
+  border-color: #e53e3e !important;
+}
+
+.fieldError {
+  color: #e53e3e;
+  font-size: 0.83rem;
+  margin: 0.3rem 0 0;
+}
+
+/* ── Confirm re-extract dialog ───────────────────────────────────────────── */
+
+.confirmBox {
+  background: #fffbeb;
+  border: 1px solid #f6e05e;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.confirmMsg {
+  margin: 0 0 0.75rem;
+  font-size: 0.93rem;
+  color: #744210;
+}
+
+.confirmBtns {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ── Extract row ─────────────────────────────────────────────────────────── */
+
+.extractRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.extractingNote {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.btnPrimary {
+  padding: 0.55rem 1.3rem;
+  background: #1a56db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: #1748c0;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  padding: 0.5rem 1.1rem;
+  background: #fff;
+  color: #2d3748;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.93rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnSecondary:hover {
+  background: #f7fafc;
+}
+
+.btnDanger {
+  padding: 0.5rem 1.1rem;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnDanger:hover {
+  background: #c53030;
+}
+
+.btnLink {
+  background: none;
+  border: none;
+  color: #1a56db;
+  font-size: 0.88rem;
+  cursor: pointer;
+  padding: 0.1rem 0;
+  text-decoration: underline;
+}
+
+.btnLink:hover {
+  color: #1748c0;
+}
+
+/* ── Status banners ──────────────────────────────────────────────────────── */
+
+.statusBanner {
+  margin-top: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 7px;
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+.banner_error {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  color: #c53030;
+}
+
+.banner_info {
+  background: #ebf8ff;
+  border: 1px solid #bee3f8;
+  color: #2b6cb0;
+}
+
+/* ── Results panel ───────────────────────────────────────────────────────── */
+
+.resultsPanel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+.extractMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  color: #4a5568;
+  margin-bottom: 0.9rem;
+}
+
+.metaSep {
+  color: #cbd5e0;
+}
+
+.metaMuted {
+  color: #718096;
+}
+
+/* ── Unsaved banner ──────────────────────────────────────────────────────── */
+
+.unsavedBanner {
+  background: #fffbeb;
+  border: 1px solid #f6e05e;
+  border-radius: 7px;
+  padding: 0.75rem 1rem;
+  font-size: 0.88rem;
+  color: #744210;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* ── Selection bar ───────────────────────────────────────────────────────── */
+
+.selectionBar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.selectionCount {
+  font-size: 0.88rem;
+  color: #4a5568;
+}
+
+/* ── Candidate list ──────────────────────────────────────────────────────── */
+
+.candidateList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.candidateItem {
+  /* no additional styles needed */
+}
+
+/* ── Candidate card ──────────────────────────────────────────────────────── */
+
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.cardChecked {
+  border-color: #1a56db;
+  box-shadow: 0 0 0 2px rgba(26,86,219,.12);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: #f7faff;
+  flex-wrap: wrap;
+}
+
+.checkboxWrap {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.checkboxWrap input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  accent-color: #1a56db;
+}
+
+.typeBadge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.type_term {
+  background: #dbe4ff;
+  color: #1a3a8f;
+}
+
+.type_phrase {
+  background: #e9d8fd;
+  color: #553c9a;
+}
+
+.cardTitle {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.english {
+  font-weight: 600;
+  color: #1a202c;
+  font-size: 0.98rem;
+}
+
+.abbreviation {
+  color: #4a5568;
+  font-size: 0.88rem;
+}
+
+.chinese {
+  color: #718096;
+  font-size: 0.88rem;
+}
+
+.sourceBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.source_material {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.source_ai {
+  background: #fed7aa;
+  color: #7b341e;
+}
+
+.expandBtn {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: #718096;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: background 0.1s;
+}
+
+.expandBtn:hover {
+  background: #edf2f7;
+}
+
+/* ── Card detail (expanded) ──────────────────────────────────────────────── */
+
+.cardDetail {
+  padding: 1rem 1.25rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f4f8;
+}
+
+.fieldGroup:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fieldInput {
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 5px;
+  font-size: 0.93rem;
+  font-family: inherit;
+  color: #1a202c;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.fieldInput:focus {
+  outline: none;
+  border-color: #1a56db;
+  box-shadow: 0 0 0 2px rgba(26,86,219,.12);
+}
+
+.fieldTextarea {
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 5px;
+  font-size: 0.91rem;
+  font-family: inherit;
+  line-height: 1.55;
+  color: #1a202c;
+  background: #fff;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.fieldTextarea:focus {
+  outline: none;
+  border-color: #1a56db;
+  box-shadow: 0 0 0 2px rgba(26,86,219,.12);
+}
+
+/* ── Source excerpt ──────────────────────────────────────────────────────── */
+
+.sourceExcerpt {
+  background: #f7faff;
+  border-left: 3px solid #1a56db;
+  border-radius: 0 5px 5px 0;
+  padding: 0.65rem 0.9rem;
+}
+
+.sourceExcerptLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sourceExcerptText {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #4a5568;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.aiNote {
+  font-size: 0.83rem;
+  color: #744210;
+  background: #fffbeb;
+  border: 1px solid #f6e05e;
+  border-radius: 5px;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ── Empty result ────────────────────────────────────────────────────────── */
+
+.emptyResult {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #718096;
+}
+
+.emptyResult p {
+  margin: 0 0 0.4rem;
+  font-size: 0.93rem;
+}
+
+/* ── Action strip (bottom) ───────────────────────────────────────────────── */
+
+.actionStrip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.saveNote {
+  font-size: 0.8rem;
+  color: #a0aec0;
+}
+
+/* ── Narrow screen ───────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .inputPanel,
+  .resultsPanel {
+    padding: 1rem;
+  }
+
+  .cardHeader {
+    padding: 0.65rem 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .cardTitle {
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  .sourceBadge {
+    order: 4;
+  }
+
+  .expandBtn {
+    order: 5;
+    margin-left: auto;
+  }
+
+  .actionStrip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ── Tabs ─────────────────────────────────────────────────────────────── */
+
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #718096;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover { color: #1a56db; }
+
+.tabActive {
+  color: #1a56db;
+  border-bottom-color: #1a56db;
+  font-weight: 600;
+}
+
+/* ── Save panel (inside results) ─────────────────────────────────────── */
+
+.savePanel {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.savePanelTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a202c;
+  margin: 0 0 1rem;
+}
+
+.saveRow {
+  margin-bottom: 0.9rem;
+}
+
+.selectWithAction {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.selectInput {
+  flex: 1 1 200px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.93rem;
+  font-family: inherit;
+  color: #1a202c;
+  background: #fff;
+}
+
+.selectInput:focus {
+  outline: none;
+  border-color: #1a56db;
+  box-shadow: 0 0 0 3px rgba(26,86,219,.15);
+}
+
+.inlineCreate {
+  background: #f7faff;
+  border: 1px solid #dbe4ff;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.inlineDateRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ── Banner variants ─────────────────────────────────────────────────── */
+
+.banner_success {
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  color: #22543d;
+}
+
+.banner_warning {
+  background: #fffbeb;
+  border: 1px solid #f6e05e;
+  color: #744210;
+}
+
+/* ── My Library tab ──────────────────────────────────────────────────── */
+
+.libraryHeader {
+  margin-bottom: 1rem;
+}
+
+.filterBar {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 0.4rem 0.65rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: #fff;
+}
+
+.libCount {
+  font-size: 0.85rem;
+  color: #718096;
+  margin: 0 0 0.75rem;
+}
+
+.loading {
+  color: #718096;
+  font-size: 0.93rem;
+  padding: 1rem 0;
+}
+
+.savedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.savedItem {}
+
+/* ── Saved word card ─────────────────────────────────────────────────── */
+
+.savedCard {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.9rem 1rem 0.75rem;
+  transition: border-color 0.15s;
+}
+
+.savedCardEdited {
+  border-left: 3px solid #9f7aea;
+}
+
+.savedCardHeader {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.savedCardTitle {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.savedCardMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.savedCardActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  align-items: center;
+}
+
+.savedCardSummary {
+  font-size: 0.88rem;
+  color: #4a5568;
+  margin: 0 0 0;
+  line-height: 1.5;
+}
+
+.savedCardDetail {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f4f8;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.savedField {
+  font-size: 0.88rem;
+  color: #4a5568;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.savedMeta {
+  font-size: 0.78rem;
+  color: #718096;
+  margin: 0;
+}
+
+.editedBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  background: #e9d8fd;
+  color: #553c9a;
+}
+
+.editForm {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.editFormActions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* ── Course/session badges (library) ─────────────────────────────────── */
+
+.courseBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: #dbe4ff;
+  color: #1a3a8f;
+}
+
+.sessionBadge {
+  font-size: 0.7rem;
+  color: #718096;
+  padding: 0.15rem 0.5rem;
+  background: #f0f4f8;
+  border-radius: 4px;
+}
+
+.btnDangerLink {
+  color: #e53e3e !important;
+}
+
+.btnDangerLink:hover {
+  color: #c53030 !important;
+}
+
+/* ── Courses tab ─────────────────────────────────────────────────────── */
+
+.courseList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.courseItem {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+}
+
+.courseHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.courseCode {
+  font-size: 1rem;
+  color: #1a56db;
+}
+
+.courseName {
+  font-size: 0.9rem;
+  color: #4a5568;
+  flex: 1;
+}
+
+.sessionList {
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border-left: 2px solid #e2e8f0;
+}
+
+.sessionItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.88rem;
+}
+
+.sessionNum {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.sessionTitle {
+  color: #4a5568;
+}
+
+.sessionDate {
+  color: #718096;
+  margin-left: auto;
+}
+
+.sessionEmpty {
+  font-size: 0.85rem;
+  color: #a0aec0;
+  font-style: italic;
+}
+.candidateControls {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
