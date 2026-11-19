@@ -460,7 +460,7 @@ function VocabularyWorkspace() {
       const text = materialText.trim()
       if (!text) { setExtractError('Please paste your course material text first.'); return }
       if (text.length > MAX_INPUT_CHARS) {
-        setExtractError(`Text is too long (${text.length.toLocaleString()} chars). Limit: ${MAX_INPUT_CHARS.toLocaleString()}.`)
+        setExtractError(`Text is too long (${text.length.toLocaleString('en-US')} chars). Limit: ${MAX_INPUT_CHARS.toLocaleString('en-US')}.`)
         return
       }
       const jwt = authSession?.access_token
@@ -751,7 +751,7 @@ function VocabularyWorkspace() {
               <label className={styles.inputLabel} htmlFor="material-text">
                 Course material
                 <span className={`${styles.charCount} ${charOverLimit ? styles.charOver : ''}`}>
-                  {charCount.toLocaleString()} / {MAX_INPUT_CHARS.toLocaleString()}
+                  {charCount.toLocaleString('en-US')} / {MAX_INPUT_CHARS.toLocaleString('en-US')}
                 </span>
               </label>
               <textarea id="material-text" className={`${styles.textareaInput} ${charOverLimit ? styles.textareaOver : ''}`}
@@ -761,7 +761,7 @@ function VocabularyWorkspace() {
                 aria-describedby={charOverLimit ? 'char-error' : undefined} />
               {charOverLimit && (
                 <p id="char-error" className={styles.fieldError} role="alert">
-                  Text exceeds the {MAX_INPUT_CHARS.toLocaleString()}-character limit.
+                  Text exceeds the {MAX_INPUT_CHARS.toLocaleString('en-US')}-character limit.
                 </p>
               )}
             </div>

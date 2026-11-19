@@ -20,7 +20,7 @@ const MAX_HISTORY_TURNS = 10
 function formatDate(dateStr) {
   if (!dateStr) return ''
   const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 /** Returns true when we are running locally without a Vercel serverless env. */
@@ -362,7 +362,7 @@ export default function StudyAssistant() {
                     <p className={styles.tipContent}>{tip.content}</p>
                     <div className={styles.tipMeta}>
                       <span className={styles.tipDate}>
-                        {new Date(tip.created_at).toLocaleDateString(undefined, {
+                        {new Date(tip.created_at).toLocaleDateString('en-US', {
                           month: 'short',
                           day:   'numeric',
                         })}
