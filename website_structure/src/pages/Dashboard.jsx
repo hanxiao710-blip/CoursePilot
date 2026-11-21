@@ -17,7 +17,7 @@ import styles from './Dashboard.module.css'
 function formatDeadline(dateStr) {
   if (!dateStr) return ''
   const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
 function daysUntil(dateStr) {
@@ -268,7 +268,7 @@ export default function Dashboard() {
               <div className={styles.suggestion}>
                 <p className={styles.suggestionDetail}>{suggestion.content}</p>
                 <p className={styles.suggestionMeta}>
-                  Saved {new Date(suggestion.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                  Saved {new Date(suggestion.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </p>
               </div>
             )}
